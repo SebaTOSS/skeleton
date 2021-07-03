@@ -1,0 +1,39 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "DEV",
+            "args": ["${workspaceFolder}/src/main.ts"],
+            "restart": true,
+            "autoAttachChildProcesses": true,
+            "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
+            "sourceMaps": true,
+            "stopOnEntry": false,
+            "cwd": "${workspaceRoot}",
+            "protocol": "inspector",
+            "skipFiles": [
+                "${workspaceFolder}/node_modules/**/*.js",
+                "${workspaceFolder}/lib/**/*.js"
+            ],
+            "env": {
+              "NODE_ENV": "DEV",
+              "ENVIRONMENT": "DEV",
+              "PORT": "1338",
+              "APP_NAME": "pe_eec_admin_api",
+              // LOG
+              "LOG_LEVEL": "NONE",
+              "API_FILE_LOG": "G:\\dev\\PumperBit\\skeleton\\local.log",
+              "REQUEST_FILE_LOG": "G:\\dev\\PumperBit\\skeleton\\requests_log.log",
+              "ENABLED_ROTATE_SYSLOG": "true",
+              // CONFIG
+              "CONFIG_FILE": "G:\\dev\\PumperBit\\skeleton\\config-local\\configs\\dev\\config.json",
+              "SENSIBLE_FILE": "G:\\dev\\PumperBit\\skeleton\\config-local\\configs\\dev\\sensible.json",
+            }
+        },
+    ]
+}

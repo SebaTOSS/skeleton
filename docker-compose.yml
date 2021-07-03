@@ -1,0 +1,23 @@
+version: '3'
+
+networks:
+  skeleton:
+
+services:
+  mysql:
+    image: mysql:5.7
+    ports:
+      - 3316:3306
+    environment:
+      MYSQL_DATABASE: skeleton
+      MYSQL_USER: skeleton
+      MYSQL_PASSWORD: skeleton
+      MYSQL_ROOT_PASSWORD: skeleton
+
+  redis:
+    image: redis:alpine
+    ports:
+      - 6399:6379
+    command: redis-server
+    networks:
+      - skeleton

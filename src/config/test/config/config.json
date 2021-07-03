@@ -1,0 +1,14 @@
+{
+  "customActions": {},
+  "configurations": {
+    "cache": "redis",
+    "removeActionLinks": [
+      {
+        "entity": "AgentDTO",
+        "links": [
+          "self.activation"
+        ]
+      }
+    ]
+  }
+}

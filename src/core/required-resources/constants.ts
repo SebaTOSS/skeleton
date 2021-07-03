@@ -1,0 +1,3 @@
+export default {
+    ADDITIONAL_RESOURCES: 'ADDITIONAL_RESOURCES',
+};

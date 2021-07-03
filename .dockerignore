@@ -1,0 +1,14 @@
+.git/
+.vscode/
+coverage/
+deployment/
+development/
+!development/nginx/nginx.conf
+node_modules
+npm-debug.log
+# Cache used by TypeScript's incremental build
+*.tsbuildinfo
+
+.env
+Jenkins*
+sonar-*

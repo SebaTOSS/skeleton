@@ -1,0 +1,33 @@
+export default {
+    ERRORS: {
+        CONFLICT: 'Request conflict',
+        UNAUTHORIZED: 'User is not authorize',
+        ENTITY_NOT_FOUND: 'Entity not found',
+        BAD_REQUEST: 'Validation schema error',
+        FILE_UPLOAD: 'No file was uploaded',
+        TOKEN_INVALID: 'Token is not valid',
+        TOKEN_NECESSARY: 'Token is necessary',
+        INVALID_AGENT: 'Agent or client token is required',
+        USER_HAS_NOT_PERMISSION: 'The user has not permission',
+        INVALID_EMAIL_OR_ID: 'Invalid email or ownerId',
+        SERVER_ERROR: 'Server error',
+    },
+    WARNINGS: {},
+    CODES: {
+        BAD_REQUEST: 'API400',
+        UNAUTHORIZED: 'API401',
+        PAYMENT_REQUIRED: 'API402',
+        FORBIDDEN: 'API403',
+        NOT_FOUND: 'API404',
+        NOT_ALLOW: 'API405',
+        CONFLICT: 'API409',
+        FAILED_DEPENDENCY: 'API424',
+        SERVER_ERROR: 'API500',
+        CUSTOM_ACTION: 'API700',
+    },
+    LOG_LEVEL: {
+        ALL: 'ALL',
+        THIRD_PARTY: 'THIRD_PARTY',
+        NONE: 'NONE',
+    },
+};
