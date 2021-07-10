@@ -15,9 +15,7 @@ export abstract class AbstractLinkService implements Links {
         readonly paginationService: PaginationService,
         readonly configService: ConfigService,
     ) {
-        this.baseUrl = this.configService.get('configurations.adminPanel.url');
-        this.baseCM = this.configService.get('configurations.cm.url');
-        this.baseSSO = this.configService.get('configurations.sso.url');
+        this.baseUrl = this.configService.get('configurations.api.url');
     }
 
     SELF = 'self';
@@ -32,8 +30,6 @@ export abstract class AbstractLinkService implements Links {
     segments: Array<string>;
     filterFields: object;
     baseUrl: string;
-    baseCM: string;
-    baseSSO: string;
 
     abstract getLinks(resource: ResourceDTO, permission: any[]): object;
 
@@ -162,20 +158,6 @@ export abstract class AbstractLinkService implements Links {
         return `${this.baseUrl}/required-resources?${UtilsService.serialize(
             query,
         )}`;
-    }
-
-    ntpBookingUrl(reservationId: string, channelId: string, hotelId: string): string {
-        return `${this.baseCM}/${channelId}/hotel/${hotelId}/reservations/detail/${reservationId}`;
-    }
-
-    booking(query: any): any {
-        return {
-            url: `${this.baseUrl}/bookings/${query.reservationId}?${UtilsService.serialize(query)}`,
-            modify: `${this.baseUrl}/bookings/${query.reservationId}/modify?${UtilsService.serialize(query)}`,
-            urlChargeAndRefund: `${this.baseUrl}/owners/${query.clientId}/bookings/${query.reservationId}/balances`,
-            urlCharge: `${this.baseUrl}/owners/${query.clientId}/bookings/${query.reservationId}/balances/charge`,
-            urlRefund: `${this.baseUrl}/owners/${query.clientId}/bookings/${query.reservationId}/balances/refund`
-        }
     }
 
     customLinks(resource: ResourceDTO, permission: Array<any>): any {

@@ -9,7 +9,7 @@ export class ApiKeyService {
     constructor(
         private readonly configService: ConfigService
     ) {
-        this.API_KEYS = Object.values(this.configService.get('configurations.frontend.keys'));
+        this.API_KEYS = Object.values(this.configService.get('configurations.api.keys'));
     }
 
     isValidApiKey(apiKey) {

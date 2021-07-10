@@ -20,7 +20,14 @@ export class AuthMiddleware implements NestMiddleware {
             const hasValidAPIKey = this.apiKeyService.isValidApiKey(authorization);
 
             if (hasValidAPIKey) {
-                req.session = { permissions: [] };
+                req.session = {
+                    permissions: [
+                        { name: 'USERS_CREATE' },
+                        { name: 'USERS_READ' },
+                        { name: 'USERS_UPDATE' },
+                        { name: 'PUBLIC' },
+                    ],
+                };
                 return next();
             }
 

@@ -1,3 +1,4 @@
+import { UsersModule } from './users/model/users.module';
 import {
     MiddlewareConsumer,
     Module,
@@ -14,6 +15,10 @@ import { AuthMiddleware } from './core/security';
 import { ConfigModule } from './config/config.module';
 import { CacheModule } from './cache';
 import { LoggerModule } from './interceptors';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UsersRESTModule } from './users';
+import ConfigService from './config/config.service';
+
 
 const consoleLog = new winston.transports.Console({
     level: levelLog(process.env.NODE_ENV),
@@ -37,7 +42,16 @@ const modules = [
     }),
     ConfigModule,
     CacheModule.forRoot(),
+    TypeOrmModule.forRootAsync({
+        imports: [
+        UsersModule, ConfigModule],
+        useFactory: (configService: ConfigService) => {
+            return configService.get('configurations.orm');
+        },
+        inject: [ConfigService]
+    }),
     LoggerModule,
+    UsersRESTModule,
 ];
 
 const middleware: Array<any> = [AuthMiddleware];
