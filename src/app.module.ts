@@ -10,11 +10,13 @@ import {
 } from "nest-winston";
 import { levelLog, loggerFormat } from "./logger/utils";
 import * as winston from "winston";
+import { TerminusModule } from "@nestjs/terminus";
 import { AuthMiddleware } from "./core/security";
 import { ConfigModule } from "./config/config.module";
 import { CacheModule } from "./cache";
 import { LoggerModule } from "./interceptors";
 import { HATEOASModule } from "./interceptors/hateoas/hateoas.module";
+import { HealthModule } from "./health/health.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { UsersRESTModule } from "./users";
 import ConfigService from "./config/config.service";
@@ -37,6 +39,7 @@ const fileLog = new winston.transports.File({
 });
 
 const modules = [
+  TerminusModule,
   WinstonModule.forRoot({
     transports: [consoleLog, fileLog],
   }),
@@ -51,6 +54,7 @@ const modules = [
   }),
   HATEOASModule,
   LoggerModule,
+  HealthModule,
   UsersRESTModule,
   DepartmentsModule,
 ];
