@@ -21,6 +21,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { UsersRESTModule } from "./users";
 import ConfigService from "./config/config.service";
 import { DepartmentsModule } from "./departments";
+import { ThrottlerModule } from "@nestjs/throttler";
 
 const consoleLog = new winston.transports.Console({
   level: levelLog(process.env.NODE_ENV),
@@ -47,10 +48,17 @@ const modules = [
   CacheModule.forRoot(),
   TypeOrmModule.forRootAsync({
     imports: [ConfigModule],
+    inject: [ConfigService],
     useFactory: (configService: ConfigService) => {
       return configService.get("configurations.orm");
     },
+  }),
+  ThrottlerModule.forRootAsync({
+    imports: [ConfigModule],
     inject: [ConfigService],
+    useFactory: (configService: ConfigService) => {
+      return configService.get("configurations.rateLimit");
+    },
   }),
   HATEOASModule,
   LoggerModule,
