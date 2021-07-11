@@ -1,35 +1,40 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { CreateUserDTO, UserDTO } from '../dtos';
-import { User } from '../entities/user.entity';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { ResourcesDTO, ResourcesFactory } from "../../core";
+import { Repository } from "typeorm";
+import { CreateUserDTO, UserDTO } from "../dtos";
+import { User } from "../entities/user.entity";
 
 @Injectable()
 export class UsersService {
-    constructor(
-        @InjectRepository(User)
-        private usersRepository: Repository<User>,
-    ) {}
+  constructor(
+    @InjectRepository(User)
+    private usersRepository: Repository<User>
+  ) {}
 
-    async create(createUserDTO: CreateUserDTO): Promise<UserDTO> {
-        const user: User = await this.usersRepository.save(createUserDTO);
-        const translated: UserDTO = new UserDTO(user);
+  async create(createUserDTO: CreateUserDTO): Promise<UserDTO> {
+    const user: User = await this.usersRepository.save(createUserDTO);
 
-        return translated;
-    }
+    return new UserDTO(user);
+  }
 
-    async findAll(): Promise<User[]> {
-        return this.usersRepository.find();
-    }
+  async findAll(query: any): Promise<ResourcesDTO<UserDTO>> {
+    const { perPage } = query;
+    const options = {
+      take: perPage,
+    };
+    const [users] = await this.usersRepository.findAndCount(options);
 
-    async findOne(id: string): Promise<UserDTO> {
-        const user: User = await this.usersRepository.findOne(id);
-        const translated: UserDTO = new UserDTO(user);
+    return ResourcesFactory.build(UserDTO, users, query);
+  }
 
-        return translated;
-    }
+  async findOne(id: string): Promise<UserDTO> {
+    const user: User = await this.usersRepository.findOneOrFail(id);
 
-    async remove(id: string): Promise<void> {
-        await this.usersRepository.delete(id);
-    }
+    return new UserDTO(user);
+  }
+
+  async delete(id: string): Promise<void> {
+    await this.usersRepository.delete(id);
+  }
 }

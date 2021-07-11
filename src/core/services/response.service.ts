@@ -1,27 +1,33 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
+import { ResourceDTO, ResourcesDTO } from "../dtos";
+import { ResponseDTO } from "../dtos/response.dto";
 
 @Injectable()
 export class ResponseService {
-    getErrorResponse(errors: any[]) {
-        return {
-            success: false,
-            data: null,
-            errors: errors.map(({ code, message, details }) => {
-                return {
-                    code,
-                    details,
-                    message,
-                };
-            }),
-        };
-    }
+  getError(errors: any[]): ResponseDTO {
+    const response = new ResponseDTO();
+    response.success = false;
+    response.errors = errors.map(({ code, message, details }) => ({
+      code,
+      details,
+      message,
+    }));
 
-    getSuccessResponse(data?: any, errors: Array<any> = [], warnings: Array<any> = [], success = true): object {
-        return {
-            success,
-            errors,
-            warnings,
-            data,
-        };
-    }
+    return response;
+  }
+
+  getSuccess(
+    data?: ResourceDTO | ResourcesDTO<any>,
+    errors: Array<any> = [],
+    warnings: Array<any> = [],
+    success = true
+  ): ResponseDTO {
+    const response = new ResponseDTO();
+    response.success = success;
+    response.errors = errors;
+    response.warnings = warnings;
+    response.data = data;
+
+    return response;
+  }
 }
