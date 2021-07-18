@@ -35,7 +35,7 @@ async function bootstrap() {
   }
   app.use(expressMiddleware());
   app.use(helmet());
-  app.use(csurf());
+  // app.use(csurf());
 
   await app.listen(process.env.PORT);
 }

@@ -19,13 +19,28 @@ export class UsersService {
   }
 
   async findAll(query: any): Promise<ResourcesDTO<UserDTO>> {
-    const { perPage } = query;
+    const { take, skip, order } = query;
     const options = {
-      take: perPage,
+      take,
+      skip,
+      order,
     };
-    const [users] = await this.usersRepository.findAndCount(options);
 
-    return ResourcesFactory.build(UserDTO, users, query);
+    const [users, total] = await this.usersRepository.findAndCount(options);
+
+    const pages = Math.round(total / take);
+    const prePage = skip - 1 || 0;
+    const nextPage = skip + 1 <= total ? skip + 1 : 0;
+    const pagination = {
+      total,
+      pages,
+      prePage,
+      nextPage,
+      perPage: take,
+      page: skip,
+    };
+
+    return ResourcesFactory.build(UserDTO, users, query, pagination);
   }
 
   async findOne(id: string): Promise<UserDTO> {

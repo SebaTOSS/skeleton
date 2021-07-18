@@ -1,22 +1,25 @@
-import { ArgumentMetadata, Injectable, PipeTransform } from '@nestjs/common';
+import { ArgumentMetadata, Injectable, PipeTransform } from "@nestjs/common";
 
 @Injectable()
 export class DefaultPaginationPipe implements PipeTransform {
-    private readonly defaultPerPage: number;
-    constructor(perPage?: number) {
-        this.defaultPerPage = perPage;
+  private readonly defaultPerPage: number;
+  constructor(perPage?: number) {
+    this.defaultPerPage = perPage;
+  }
+
+  transform(value: any, metadata: ArgumentMetadata) {
+    if (metadata.type === "query") {
+      if (value.perPage) {
+        value.take = +value.perPage;
+      } else {
+        value.take = this.defaultPerPage || 10;
+      }
+
+      value.skip = +value.page || 0;
+
+      return value;
     }
 
-    transform(value: any, metadata: ArgumentMetadata) {
-        if (metadata.type === 'query') {
-            if (value.perPage) {
-                return value;
-            }
-            value.perPage = this.defaultPerPage ? this.defaultPerPage: 10;
-
-            return value;
-        }
-
-        return value;
-    }
+    return value;
+  }
 }

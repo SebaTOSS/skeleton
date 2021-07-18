@@ -22,6 +22,9 @@ import { UsersRESTModule } from "./users";
 import ConfigService from "./config/config.service";
 import { DepartmentsModule } from "./departments";
 import { ThrottlerModule } from "@nestjs/throttler";
+import { EmailModule } from "./email/email.module";
+import { MailerModule } from "@nestjs-modules/mailer";
+import { HandlebarsAdapter } from "@nestjs-modules/mailer/dist/adapters/handlebars.adapter";
 
 const consoleLog = new winston.transports.Console({
   level: levelLog(process.env.NODE_ENV),
@@ -60,6 +63,26 @@ const modules = [
       return configService.get("configurations.rateLimit");
     },
   }),
+  MailerModule.forRootAsync({
+    imports: [ConfigModule],
+    inject: [ConfigService],
+    useFactory: (configService: ConfigService) => {
+      const { transport, defaults } = configService.get("configurations.smtp");
+
+      return {
+        transport,
+        defaults,
+        template: {
+          dir: __dirname + "/templates",
+          adapter: new HandlebarsAdapter(),
+          options: {
+            strict: true,
+          },
+        },
+      };
+    },
+  }),
+  EmailModule,
   HATEOASModule,
   LoggerModule,
   HealthModule,
@@ -77,10 +100,7 @@ export class AppModule implements NestModule {
     consumer
       .apply(...middleware)
       .exclude(
-        { path: "login", method: RequestMethod.ALL },
-        { path: "logout", method: RequestMethod.ALL },
-        { path: "remove-action-links/(.*)", method: RequestMethod.ALL },
-        "livetest",
+        { path: "action-links/(.*)", method: RequestMethod.ALL },
         "favicon.ico"
       )
       .forRoutes("*");

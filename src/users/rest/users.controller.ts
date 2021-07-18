@@ -56,6 +56,20 @@ export class UsersController {
     required: false,
     type: String,
   })
+  @ApiQuery({
+    name: "order",
+    required: false,
+  })
+  @ApiQuery({
+    name: "page",
+    required: false,
+    type: Number,
+  })
+  @ApiQuery({
+    name: "perPage",
+    required: false,
+    type: Number,
+  })
   @ApiForbiddenResponse({ description: "Forbidden." })
   @Permissions(CONSTANTS.PERMISSIONS.READ)
   @UsePipes(
