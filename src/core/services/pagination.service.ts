@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from "@nestjs/common";
 import { UtilsService } from "../../utils/utils.service";
-import { PaginationDTO, ResourceDTO, ResourcesDTO } from "../dtos";
 import * as _ from "lodash";
 
 const createLink = (method: string, rel: string, url: string) => ({
@@ -11,27 +11,9 @@ const createLink = (method: string, rel: string, url: string) => ({
 
 @Injectable()
 export class PaginationService {
-  static translate(
-    object: any,
-    dto: PaginationDTO<ResourcesDTO<ResourceDTO>>,
-    query: any = {}
-  ): PaginationDTO<ResourcesDTO<ResourceDTO>> {
-    const { page, pages, total, prevPage, perPage, nextPage } = object;
-
-    dto.page = page;
-    dto.pages = pages;
-    dto.total = total;
-    dto.prevPage = prevPage;
-    dto.perPage = perPage;
-    dto.nextPage = nextPage;
-    dto.query = query;
-    dto.links = {};
-
-    return dto;
-  }
-
   getLinks(baseUrl, url, prevPage, page, nextPage, perPage, currentQuery) {
     const query = _.omit(currentQuery, ["perPage", "page"]);
+
     return {
       perPages: {
         10: createLink(

@@ -23,6 +23,7 @@ import {
   DefaultOrderPipe,
   DefaultPaginationPipe,
   TranslateOrderPipe,
+  SchemaValidationPipe,
 } from "../../commons";
 import { ResponseDTO, ResponseService } from "../../core";
 import { PermissionGuard, Permissions } from "../../core/security";
@@ -31,6 +32,7 @@ import { CreateUserDTO, UserDTO } from "../dtos";
 import CONSTANTS from "../constants";
 import { LinkGeneratorInterceptor } from "../../interceptors/hateoas/link.generator.interceptor";
 import { UsersService } from "../model/users.service";
+import SCHEMAS from "./schemas";
 
 @UseGuards(PermissionGuard)
 @UseInterceptors(LoggerInterceptor, LinkGeneratorInterceptor)
@@ -116,6 +118,7 @@ export class UsersController {
   })
   @ApiForbiddenResponse({ description: "Forbidden." })
   @Permissions(CONSTANTS.PERMISSIONS.CREATE)
+  @UsePipes(new SchemaValidationPipe(SCHEMAS.post))
   async create(@Body() createUserDTO: CreateUserDTO): Promise<ResponseDTO> {
     const user: UserDTO = await this.usersService.create(createUserDTO);
 

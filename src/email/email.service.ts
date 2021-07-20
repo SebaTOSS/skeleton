@@ -9,7 +9,7 @@ export class EmailService {
   send(user: UserDTO): void {
     this.mailerService
       .sendMail({
-        to: "sebastian.perez.escribano@gmail.com",
+        to: "",
         from: "noreply@crm.com",
         subject: "With engine",
         template: __dirname + "/templates" + "/welcome",

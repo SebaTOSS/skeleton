@@ -15,7 +15,7 @@ export class DefaultPaginationPipe implements PipeTransform {
         value.take = this.defaultPerPage || 10;
       }
 
-      value.skip = +value.page || 0;
+      value.skip = (+value.page || 0) * value.take;
 
       return value;
     }

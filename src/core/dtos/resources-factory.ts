@@ -1,74 +1,36 @@
-import { TranslatorService } from "../interfaces";
-import { PaginationService } from "../services";
 import { PaginationDTO } from "./pagination.dto";
 import { ResourcesDTO } from "./resources.dto";
 
 export class ResourcesFactory {
-  static create<T>(
-    type: new () => T,
-    raw: Array<any>,
-    query: any,
-    pagination: any,
-    permissions: Array<any> = [],
-    service: TranslatorService,
-    shouldCreateLinks = true,
-    metadata?: any
-  ): ResourcesDTO<T> {
-    const reducer = (array: any[], item: any) =>
-      array.concat(
-        service.translateResponse(
-          item,
-          permissions,
-          shouldCreateLinks,
-          metadata
-        )
-      );
-    const items = raw.reduce(reducer, []);
-    const translated = new ResourcesDTO(type);
-    translated.metadata = metadata;
-
-    if (pagination) {
-      const paginationDTO = new PaginationDTO(type);
-      paginationDTO.metadata = metadata;
-      translated.pagination = PaginationService.translate(
-        pagination,
-        paginationDTO,
-        query
-      );
-    }
-
-    translated.items = items;
-    translated.query = query;
-
-    if (shouldCreateLinks) {
-      translated.createLinks(service.linksService, permissions);
-    } else {
-      translated.cleanUp();
-    }
-
-    return translated;
-  }
-
-  static build(
+  static create(
     type: any,
-    raw: Array<any>,
+    items: Array<any>,
     query: any,
-    pagination?: any,
+    total: number,
     metadata?: any
   ): ResourcesDTO<any> {
     const resources = new ResourcesDTO(type);
     resources.metadata = metadata;
-    resources.items = raw.map((entity) => new type(entity));
+    resources.items = items.map((entity) => new type(entity));
     resources.query = query;
 
-    if (pagination) {
-      const paginationDTO = new PaginationDTO(type);
-      paginationDTO.metadata = metadata;
-      resources.pagination = PaginationService.translate(
-        pagination,
-        paginationDTO,
-        query
-      );
+    const { take, page } = query;
+    const currentPage = +page || 0;
+    const pages = Math.round(total / take);
+
+    if (pages) {
+      const prevPage = currentPage - 1 <= 0 ? 0 : currentPage - 1;
+      const nextPage = (currentPage + 1) * take <= total ? currentPage + 1 : 0;
+      const data = {
+        total,
+        pages,
+        prevPage,
+        nextPage,
+        metadata,
+        page: currentPage,
+        perPage: take,
+      };
+      resources.pagination = new PaginationDTO(type, data);
     }
 
     return resources;

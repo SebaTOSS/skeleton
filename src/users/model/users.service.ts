@@ -28,19 +28,7 @@ export class UsersService {
 
     const [users, total] = await this.usersRepository.findAndCount(options);
 
-    const pages = Math.round(total / take);
-    const prePage = skip - 1 || 0;
-    const nextPage = skip + 1 <= total ? skip + 1 : 0;
-    const pagination = {
-      total,
-      pages,
-      prePage,
-      nextPage,
-      perPage: take,
-      page: skip,
-    };
-
-    return ResourcesFactory.build(UserDTO, users, query, pagination);
+    return ResourcesFactory.create(UserDTO, users, query, total);
   }
 
   async findOne(id: string): Promise<UserDTO> {
