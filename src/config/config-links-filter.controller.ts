@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Body,
   Controller,
@@ -18,7 +19,7 @@ import {
 import { SchemaValidationPipe } from "../commons";
 import { ResponseService } from "../core";
 import { APIKeyGuard } from "../core/security";
-import { LoggerInterceptor, RequestId } from "../interceptors";
+import { LoggerInterceptor } from "../interceptors";
 import { ConfigManagerLinksFilterService } from "./config-manager-links-filter.service";
 import { LinkRemoveItem } from "./dtos";
 import SCHEMAS from "./schemas";
@@ -59,7 +60,7 @@ export class ConfigLinksFilterController {
   })
   @ApiForbiddenResponse({ description: "Forbidden." })
   @UsePipes(new SchemaValidationPipe(SCHEMAS.post))
-  async add(@RequestId() reqId, @Body() payload: LinkRemoveItem) {
+  async add(@Body() payload: LinkRemoveItem) {
     return;
   }
 
@@ -74,7 +75,7 @@ export class ConfigLinksFilterController {
   })
   @ApiForbiddenResponse({ description: "Forbidden." })
   @UsePipes(new SchemaValidationPipe(SCHEMAS.delete))
-  async remove(@RequestId() reqId, @Body() payload: any) {
+  async remove(@Body() payload: any) {
     return;
   }
 }

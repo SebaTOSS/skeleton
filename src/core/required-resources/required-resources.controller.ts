@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Controller,
   Get,
@@ -11,11 +12,12 @@ import { LoggerInterceptor, RequestId } from "../../interceptors";
 import { PermissionGuard, Permissions } from "../security";
 import { ResponseService } from "../services";
 import { RequiredResourcesFactoryService } from "./required-resources-factory.service";
+import CONSTANTS from "./constants";
 
 @UseGuards(PermissionGuard)
 @UseInterceptors(LoggerInterceptor)
 @Controller("/required-resources")
-@ApiTags("Public")
+@ApiTags("Required Resources")
 export class RequiredResourcesController {
   constructor(
     private readonly requiredResourcesService: RequiredResourcesFactoryService,
@@ -24,7 +26,7 @@ export class RequiredResourcesController {
 
   @Get()
   @HttpCode(200)
-  @Permissions("PUBLIC")
+  @Permissions(CONSTANTS.PERMISSIONS.READ)
   @ApiQuery({
     name: "schema",
     required: true,

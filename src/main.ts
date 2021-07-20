@@ -3,7 +3,6 @@ import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { AppModule } from "./app.module";
 import { expressMiddleware } from "prometheus-api-metrics";
 import * as helmet from "helmet";
-import * as csurf from "csurf";
 
 function generateDocumentation(app) {
   const options = new DocumentBuilder()
@@ -35,7 +34,6 @@ async function bootstrap() {
   }
   app.use(expressMiddleware());
   app.use(helmet());
-  // app.use(csurf());
 
   await app.listen(process.env.PORT);
 }

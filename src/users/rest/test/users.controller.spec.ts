@@ -1,6 +1,5 @@
 import createMockInstance from "jest-create-mock-instance";
-import { ResourcesDTO, ResponseService } from "../../../core";
-import { UserDTO } from "../../dtos";
+import { ResponseService } from "../../../core";
 import { UsersController } from "../users.controller";
 import { UsersService } from "../../model/users.service";
 
@@ -17,11 +16,6 @@ describe("Owner Users Controller", () => {
   });
 
   it("should get all", async () => {
-    const getResult = {
-      data: [],
-      pagination: {},
-    };
-
     jest.spyOn(responseService, "getSuccess");
 
     await controller.find(query);

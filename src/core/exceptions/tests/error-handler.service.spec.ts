@@ -16,8 +16,8 @@ describe("Error Handler Service", () => {
 
     const expectedError = {
       detail: "Test",
-      code: "API400",
-      messages: ["Validation schema error"],
+      code: 400,
+      messages: ["BAD_REQUEST"],
     };
     expect(result.status).toEqual(status);
     expect(result.errors).toEqual(expectedError);
@@ -30,8 +30,8 @@ describe("Error Handler Service", () => {
     const result = service.handleAPIException(exception);
 
     const expectedError = {
-      code: "API500",
-      messages: ["Server error"],
+      code: 500,
+      messages: ["EnumsAPI.ERRORS.SERVER_ERROR"],
     };
     expect(result.status).toEqual(100);
     expect(result.errors).toEqual(expectedError);

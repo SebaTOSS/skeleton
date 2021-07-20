@@ -21,6 +21,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@golevelup/ts-jest": "0.2.3",
     "@hapi/joi": "^17.1.1",
     "@hapi/joi-date": "^2.0.1",
     "@nestjs-modules/mailer": "^1.6.0",
@@ -91,15 +92,25 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
+    "rootDir": ".",
     "testRegex": ".spec.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
-    "coverageDirectory": "../coverage",
+    "setupFilesAfterEnv": [
+      "./test/setup.ts"
+    ],
+    "collectCoverageFrom": [
+      "<rootDir>/**/*.ts",
+      "!/node_modules/",
+      "!/index.ts",
+      "!<rootDir>/src/**/*.module.ts",
+      "!<rootDir>/src/main.ts",
+      "!<rootDir>/src/app.module.ts",
+      "!<rootDir>/**/*/index.ts",
+      "!<rootDir>/test/**/*.ts"
+    ],
+    "coverageDirectory": "coverage",
     "testEnvironment": "node"
-  },
-  "setupFilesAfterEnv": [
-    "./test/setup.ts"
-  ]
+  }
 }

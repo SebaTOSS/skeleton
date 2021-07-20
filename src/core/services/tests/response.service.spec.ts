@@ -1,3 +1,4 @@
+import { ResourceDTO } from "../../../core/dtos";
 import { ResponseService } from "../response.service";
 
 describe("Response service", () => {
@@ -20,7 +21,8 @@ describe("Response service", () => {
     });
 
     it("should return a success response with data", () => {
-      const data = {};
+      class DummyDTO extends ResourceDTO {}
+      const data = new DummyDTO();
       const result = service.getSuccess(data);
 
       expect(result).toBeDefined();
@@ -48,7 +50,6 @@ describe("Response service", () => {
       expect(result).toBeDefined();
       expect(result).toEqual({
         success: false,
-        data: null,
         errors: [
           {
             code: 1,
