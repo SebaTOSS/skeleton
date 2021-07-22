@@ -1,3 +1,5 @@
+import { RolesRESTModule } from "./roles/rest/roles.rest.module";
+import { RolesModule } from "./roles/model/roles.module";
 import {
   MiddlewareConsumer,
   Module,
@@ -86,6 +88,7 @@ const modules = [
   HATEOASModule,
   LoggerModule,
   HealthModule,
+  RolesRESTModule,
   UsersRESTModule,
   DepartmentsModule,
 ];

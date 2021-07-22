@@ -1,23 +1,47 @@
-version: '3'
-
-networks:
-  skeleton:
+version: '3.8'
 
 services:
   mysql:
     image: mysql:5.7
     ports:
-      - 3316:3306
+      - 3307:3306
     environment:
-      MYSQL_DATABASE: skeleton
-      MYSQL_USER: skeleton
-      MYSQL_PASSWORD: skeleton
-      MYSQL_ROOT_PASSWORD: skeleton
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
 
   redis:
     image: redis:alpine
     ports:
       - 6399:6379
     command: redis-server
-    networks:
-      - skeleton
+
+  dev:
+      container_name: skeleton_api_dev
+      build:
+          context: .
+          target: development
+          dockerfile: ./Dockerfile
+      command: npm run start:debug
+      ports:
+          - 3000:3000
+          - 9229:9229
+      volumes:
+          - .:/usr/src/app
+          - /usr/src/app/node_modules
+      restart: unless-stopped
+      environment:
+        NODE_ENV: DEV
+        ENVIRONMENT: DEV
+        PORT: 3000
+        APP_NAME: skeleton_api
+        LOG_LEVEL: NONE
+        ENABLED_ROTATE_SYSLOG: 'true'
+        API_FILE_LOG: /usr/log/dev.log
+        REQUEST_FILE_LOG: /usr/log/requests.log
+        CONFIG_FILE: /usr/src/app/config-local/configs/dev/config.json
+        SENSIBLE_FILE: /usr/src/app/config-local/configs/dev/sensible.json
+      depends_on:
+        - mysql
+        - redis

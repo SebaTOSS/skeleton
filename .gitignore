@@ -35,3 +35,5 @@ lerna-debug.log*
 
 /config-local/*
 ormconfig.json
+.vscode/launch.json
+.env

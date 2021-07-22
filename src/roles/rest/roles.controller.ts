@@ -28,19 +28,19 @@ import {
 import { ResponseDTO, ResponseService } from "../../core";
 import { PermissionGuard, Permissions } from "../../core/security";
 import { LoggerInterceptor } from "../../interceptors";
-import { CreateUserDTO, UserDTO } from "../dtos";
+import { CreateRoleDTO, RoleDTO } from "../dtos";
 import CONSTANTS from "../constants";
 import { LinkGeneratorInterceptor } from "../../interceptors/hateoas/link.generator.interceptor";
-import { UsersService } from "../model/users.service";
+import { RolesService } from "../model/roles.service";
 import SCHEMAS from "./schemas";
 
 @UseGuards(PermissionGuard)
 @UseInterceptors(LoggerInterceptor, LinkGeneratorInterceptor)
-@ApiTags("Users")
-@Controller("/users")
-export class UsersController {
+@ApiTags("Roles")
+@Controller("/roles")
+export class RolesController {
   constructor(
-    readonly service: UsersService,
+    readonly service: RolesService,
     readonly responseService: ResponseService
   ) {}
 
@@ -48,13 +48,13 @@ export class UsersController {
   @HttpCode(200)
   @ApiResponse({
     status: 200,
-    description: "List of users",
+    description: "List of roles",
   })
   @ApiOperation({
-    summary: "Gets a list of users",
+    summary: "Gets a list of roles",
   })
   @ApiQuery({
-    name: "firstName",
+    name: "name",
     required: false,
     type: String,
   })
@@ -89,10 +89,10 @@ export class UsersController {
   @HttpCode(200)
   @ApiResponse({
     status: 200,
-    description: "Gets one user",
+    description: "Gets one role",
   })
   @ApiOperation({
-    summary: "Gets one user",
+    summary: "Gets one role",
   })
   @ApiParam({
     name: "id",
@@ -102,37 +102,37 @@ export class UsersController {
   @ApiForbiddenResponse({ description: "Forbidden." })
   @Permissions(CONSTANTS.PERMISSIONS.READ)
   async findOne(@Param("id") id): Promise<ResponseDTO> {
-    const user: UserDTO = await this.service.findOne(id);
+    const role: RoleDTO = await this.service.findOne(id);
 
-    return this.responseService.getSuccess(user);
+    return this.responseService.getSuccess(role);
   }
 
   @Post()
   @HttpCode(201)
   @ApiResponse({
     status: 201,
-    description: "Creates a new user",
+    description: "Creates a new role",
   })
   @ApiOperation({
-    summary: "Creates a new user",
+    summary: "Creates a new role",
   })
   @ApiForbiddenResponse({ description: "Forbidden." })
   @Permissions(CONSTANTS.PERMISSIONS.CREATE)
   @UsePipes(new SchemaValidationPipe(SCHEMAS.post))
-  async create(@Body() createUserDTO: CreateUserDTO): Promise<ResponseDTO> {
-    const user: UserDTO = await this.service.create(createUserDTO);
+  async create(@Body() createRoleDTO: CreateRoleDTO): Promise<ResponseDTO> {
+    const role: RoleDTO = await this.service.create(createRoleDTO);
 
-    return this.responseService.getSuccess(user);
+    return this.responseService.getSuccess(role);
   }
 
   @Delete(":id")
   @HttpCode(204)
   @ApiResponse({
     status: 204,
-    description: "Deletes a user",
+    description: "Deletes a role",
   })
   @ApiOperation({
-    summary: "Deletes a user",
+    summary: "Deletes a role",
   })
   @ApiParam({
     name: "id",
